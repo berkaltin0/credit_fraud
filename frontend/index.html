@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Credit Card Fraud Detection</title>
+
+    <link
+    rel="stylesheet"
+    href="/frontend/style.css"
+>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="badge">
+            MACHINE LEARNING
+        </div>
+
+        <h1>
+            Credit Card Fraud Detection
+        </h1>
+
+        <p>
+            Analyze credit card transactions using
+            an AutoGluon machine learning model.
+        </p>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+
+        <!-- ================= PASTE ================= -->
+
+        <section class="card">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Paste Transaction
+                    </h2>
+
+                    <p>
+                        Copy one transaction row from
+                        Excel or CSV and paste it below.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <textarea
+                id="pasteInput"
+                placeholder="Paste one transaction row here...
+
+Example:
+406,-2.31,1.95,-1.60,3.99,...,-0.14,0"
+            ></textarea>
+
+
+            <div class="input-info">
+
+                Expected:
+
+                <strong>30 values</strong>
+
+                &nbsp;·&nbsp;
+
+                Time + V1–V28 + Amount
+
+            </div>
+
+
+            <button
+                id="pasteAnalyzeButton"
+                class="primary-button"
+            >
+                Analyze Transaction
+            </button>
+
+
+        </section>
+
+
+
+        <!-- ================= CSV ================= -->
+
+        <section class="card">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        CSV Upload
+                    </h2>
+
+                    <p>
+                        Upload a CSV file containing
+                        transaction data.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="upload-area"
+                id="uploadArea"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <h3>
+                    Upload CSV
+                </h3>
+
+                <p>
+                    Select a credit card transaction CSV file.
+                </p>
+
+
+                <input
+                    type="file"
+                    id="csvFile"
+                    accept=".csv"
+                    hidden
+                >
+
+
+                <button
+                    id="chooseFileButton"
+                    class="secondary-button"
+                >
+                    Choose CSV File
+                </button>
+
+            </div>
+
+
+            <div
+                id="fileInfo"
+                class="file-info hidden"
+            ></div>
+
+
+            <button
+                id="csvAnalyzeButton"
+                class="primary-button hidden"
+            >
+                Analyze CSV
+            </button>
+
+
+        </section>
+
+
+
+        <!-- ================= RESULT ================= -->
+
+        <section
+            id="result"
+            class="result hidden"
+        >
+
+            <div
+                id="resultIcon"
+                class="result-icon"
+            ></div>
+
+
+            <h2
+                id="resultLabel"
+            ></h2>
+
+
+            <div class="probability">
+
+                <span>
+                    Fraud Probability
+                </span>
+
+                <strong
+                    id="probability"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="threshold">
+
+                Detection Threshold:
+
+                <strong
+                    id="threshold"
+                >
+                    -
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= CSV SUMMARY ================= -->
+
+        <section
+            id="csvResult"
+            class="card hidden"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        CSV Analysis Results
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-grid">
+
+                <div class="summary-box">
+
+                    <span>
+                        Total Transactions
+                    </span>
+
+                    <strong
+                        id="totalTransactions"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <span>
+                        Fraud Detected
+                    </span>
+
+                    <strong
+                        id="fraudTransactions"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <span>
+                        Normal Transactions
+                    </span>
+
+                    <strong
+                        id="normalTransactions"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <span>
+                        Fraud Rate
+                    </span>
+
+                    <strong
+                        id="fraudRate"
+                    >
+                        0%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="csvProgress"
+                class="progress"
+            ></div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Row
+                        </th>
+
+                        <th>
+                            Prediction
+                        </th>
+
+                        <th>
+                            Probability
+                        </th>
+
+                        <th>
+                            Threshold
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="resultsTable"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ERROR ================= -->
+
+        <div
+            id="errorBox"
+            class="error hidden"
+        ></div>
+
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <span>
+            AutoGluon
+        </span>
+
+        <span>
+            •
+        </span>
+
+        <span>
+            FastAPI
+        </span>
+
+        <span>
+            •
+        </span>
+
+        <span>
+            Credit Fraud Detection
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+<script
+    src="/frontend/script.js"
+></script>
+
+</body>
+
+</html>
